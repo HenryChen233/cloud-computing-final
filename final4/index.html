@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>short-term renting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="jwt-decode.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.379.0.min.js"></script>
+</head>
+
+<body>
+
+<!-- 导航 -->
+<nav class="nav">
+    <div class="mid">
+        <div class="sea">                                 
+            <i class="fas fa-search" id = "seac"></i>
+            <input class="msg" placeholder=" Search">
+        </div>
+        <div class="explore"><a href="explore.html">About</a></div>
+        <div class="explore"><a href="explore.html">Contact</a></div>
+        <div class="explore" onclick="to()">Explore</div>
+    </div>
+    <div class='left'><a href="index.html" >Short-term Renting</a></div>
+    <div class='right'>    
+        <div class="rright">
+            <i class="fas fa-plus" onclick="onClick1(this)"></i>
+        </div>
+        <div class="rleft">
+            <a href="explore.html"><i class="fa fa-user" aria-hidden="true"></i></a>
+        </div>
+    </div>
+</nav>
+<div class="Body">
+<!-- modal2 -->
+<div id="modal02" class=" w3-modal">
+    <div class="w3-round w3-animate-zoom " style="width:600px; margin: 0 auto">
+        <!-- 关闭按钮 -->
+        <!-- 框 -->
+        <div class="infoc1 " style="background: #fff; border-radius: 5px ">
+            <span class="bu w3-button w3-hover-none w3-xsmall" onclick="clik1()">&times;</span>
+            <!-- 标题 -->
+            <div class="top1">
+                <p class="p">Compose</p>
+            </div>
+            <!-- 描述内容 -->
+            <div class='center1'>
+                <textarea class="txt"></textarea>
+            </div>
+            <!-- 上传 -->
+            <div class="bottom1">
+                <input class="in" id="location" placeholder="location">
+                <input class="in" id="contact" placeholder="contact info">
+                <div class="image-upload">
+                    <label for="upload_file">
+                        <i class="far fa-file-image"></i>
+                    </label>
+                    <input id="upload_file" class="upload" accept="image/*" name="img" type="file">
+                </div>
+                <button class="but1" onclick="upload()">post</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "py">
+    <div style="width:40%">
+        <div style="margin:0 auto; width: 60%">
+            <h2 style="font-family:'Comic Sans MS', cursive, sans-serif">Find what you want</h2>
+            <p style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">Best short-term housing you can find in upwest manhattan. We provide efficient way of communications between people who need it.</p>
+        </div>   
+    </div>
+<div id="player" style="width:50%; height:500px"></div>
+</div>
+</div>
+<hr style="margin-right: 150px; margin-left: 150px; margin-top: 50px;">
+<footer>
+    <div style="width:80%; margin: auto">created by c17c</div>
+</footer>
+<script src="index.js"></script>
+
+<script>
+    // 2. This code loads the IFrame Player API code asynchronously.
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // 3. This function creates an <iframe> (and YouTube player)
+    //    after the API code downloads.
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '500',
+            width: '640',
+            videoId: 'PElhlVS_UF4',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    // 5. The API calls this function when the player's state changes.
+    //    The function indicates that when playing a video (state=1),
+    //    the player should play for six seconds and then stop.
+    var done = false;
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+            setTimeout(stopVideo, -1);
+            done = true;
+        }
+    }
+
+    function stopVideo() {
+        player.stopVideo();
+    }
+</script>
+<script>
+    var s = window.location.href;
+    var i = s.indexOf("id_token");
+    var ii = s.indexOf("access");
+    var x = s.indexOf("access_token");
+    var y = s.indexOf("expires");
+    var id_token = s.substring(i + 9, ii - 1);
+    var access_token = s.substring(x + 12, y - 1);
+    var decoded = jwt_decode(id_token);
+    var decoded1 = jwt_decode(access_token);
+    console.log(id_token, "\naccess_token:", access_token, decoded["cognito:username"], decoded1);
+    function to(){
+        var getval=decoded["cognito:username"] + '/'+ id_token;
+        window.location.href="explore.html?"+getval;
+    }
+</script>
+<script>
+    function onClick1(element) {
+        document.getElementById("modal02").style.display = "block";
+    }
+    function clik1() {
+        document.getElementById("modal02").style.display = 'none';
+    }
+</script>
+</html>
